@@ -90,6 +90,7 @@ Vue.use(D2pFullEditor, {
 })
 Vue.use(D2pDemoExtend)
 Vue.use(D2pFileUploader)
+
 Vue.use(D2pUploader, {
   defaultType: 'form',
   alioss: {

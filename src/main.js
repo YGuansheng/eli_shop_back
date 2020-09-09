@@ -5,7 +5,6 @@ import store from '@/store'
 import d2Admin from '@/plugin/d2admin'
 
 import router, { constantRoutes } from './router'
-
 import './permission'
 // d2-crud-plus 安装与初始化
 import './business'

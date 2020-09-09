@@ -20,8 +20,28 @@ export default ({ request }) => ({
    */
   GOODS_CREATE (data) {
     return request({
-      url: '/api/v1/admin/product/',
+      url: '/api/v1/admin/product',
       method: 'post',
+      data
+    })
+  },
+  /**
+   * @description 商品修改
+   */
+  GOODS_UPDATE (data) {
+    return request({
+      url: '/api/v1/admin/product/' + data.id,
+      method: 'put',
+      data
+    })
+  },
+  /**
+   * @description 商品规格属性生成
+   */
+  GOODS_CREATE_FORMAT_ATTR (data) {
+    return request({
+      url: '/api/v1/admin/create_format_attr',
+      method: 'POST',
       data
     })
   }

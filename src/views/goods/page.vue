@@ -25,6 +25,7 @@
 <script>
 import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
+
 export default {
   name: 'formSelect',
   mixins: [d2CrudPlus.crud],
@@ -51,13 +52,38 @@ export default {
       return method(query)
     },
     addRequest (row) {
-      console.log(row)
       const method = this.$api[this.api.create]
       if (!this._.isFunction(method)) {
         this.$message.error('未找到 API')
         return Promise.reject(new Error('未找到 API'))
       }
       return method(row)
+    },
+    updateRequest (row) {
+      console.log(row)
+      const method = this.$api[this.api.update]
+      if (!this._.isFunction(method)) {
+        this.$message.error('未找到 API')
+        return Promise.reject(new Error('未找到 API'))
+      }
+      return method(row)
+    },
+    // 编辑对话框打开前获取详情
+    fetchDetail (index, row) {
+      if (index == null) {
+        // 添加
+        return {}
+      }
+      return GetObj(row.id).then(res => {
+        this.changeEditor(res.data.change)
+        return res.data
+      })
+    },
+    changeEditor (value) {
+        this.getEditFormTemplate('content').component.show = true
+    },
+    handleFormComponentReady (event, key, form) {
+      console.log('form component ready:', event, key, form)
     }
   }
 }

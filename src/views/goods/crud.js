@@ -1,4 +1,4 @@
-export const crudOptions = () => {
+export const crudOptions = (vm) => {
   return {
     pageOptions: {
       compact: true
@@ -15,7 +15,7 @@ export const crudOptions = () => {
       type: 'collapse', // tab暂未实现
       accordion: false,
       groups: { // 分组
-        base: { // 分组key
+        product: { // 分组key
           title: '商品基础信息', // 分组标题
           disabled: false, // 禁止展开或收起
           show: true, // 是否显示
@@ -26,6 +26,13 @@ export const crudOptions = () => {
             'market_price', 'shop_price', 'cost_price', 'weight', 'volume', 'sort', 'limit', 'on_sale',
             'is_postage', 'shipment_id'
           ] // 该组内包含的字段列表
+        },
+        variants: { // 分组key
+          title: '商品规格', // 分组标题
+          disabled: false, // 禁止展开或收起
+          show: true, // 是否显示
+          icon: 'el-icon-goods', // 分组标题前的图标
+          columns: ['variants'] // 该组内包含的字段列表
         },
         content: { // 分组key
           title: '商品详情', // 分组标题
@@ -59,10 +66,16 @@ export const crudOptions = () => {
         title: '商品标题',
         key: 'product_title',
         width: 90,
+        search: {
+          disabled: false,
+          title: '关键字'
+        },
         form: {
           rules: [ // 表单校验规则
             { required: true, message: '请输入商品标题' }
-          ]
+          ],
+          component: {
+          }
         },
         component: {
         }
@@ -71,9 +84,6 @@ export const crudOptions = () => {
         title: '商品短名称',
         key: 'short_title',
         width: 90,
-        search: {
-          disabled: false
-        },
         form: {
           rules: [ // 表单校验规则
             { required: true, message: '商品短名称' }
@@ -86,7 +96,12 @@ export const crudOptions = () => {
         title: '商品主图',
         key: 'main_image',
         width: 90,
-        type: 'avatar-uploader'
+        type: 'avatar-uploader',
+        form: {
+          rules: [ // 表单校验规则
+            { required: true, message: '商品短名称' }
+          ]
+        }
       },
       {
         title: '商品相册',
@@ -94,6 +109,7 @@ export const crudOptions = () => {
         type: 'image-uploader',
         width: 150,
         align: 'left',
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           component: {
             props: {
@@ -102,7 +118,7 @@ export const crudOptions = () => {
               },
               elProps: { // 与el-uploader 配置一致
                 multiple: true,
-                limit: 5 // 限制5个文件
+                limit: 10 // 限制5个文件
               },
               sizeLimit: 50 * 1024 // 不能超过限制
             },
@@ -116,9 +132,10 @@ export const crudOptions = () => {
         key: 'product_des',
         width: 90,
         type: 'text-area',
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           rules: [ // 表单校验规则
-            { required: true, message: '商品简介' }
+            { required: false, message: '商品简介' }
           ]
         },
         component: {
@@ -128,9 +145,10 @@ export const crudOptions = () => {
         title: '商品单位',
         key: 'product_unit',
         width: 90,
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           rules: [ // 表单校验规则
-            { required: true, message: '商品单位' }
+            { required: false, message: '商品单位' }
           ],
           component: {
             span: 12
@@ -141,9 +159,13 @@ export const crudOptions = () => {
         title: '商品货号',
         key: 'product_code',
         width: 90,
+        search: {
+          disabled: false,
+          title: '货号'
+        },
         form: {
           rules: [ // 表单校验规则
-            { required: true, message: '商品货号' }
+            { required: false, message: '商品货号' }
           ],
           component: {
             span: 12
@@ -156,6 +178,11 @@ export const crudOptions = () => {
         title: '商品SPU',
         key: 'product_spu',
         width: 90,
+        disabled: true, // 设置true可以在行展示中隐藏
+        search: {
+          disabled: false,
+          title: 'SPU'
+        },
         form: {
           rules: [ // 表单校验规则
             { required: false, message: '商品SPU' }
@@ -171,6 +198,11 @@ export const crudOptions = () => {
         title: '商品SKU',
         key: 'product_sku',
         width: 90,
+        disabled: true, // 设置true可以在行展示中隐藏
+        search: {
+          disabled: false,
+          title: 'SKU'
+        },
         form: {
           rules: [ // 表单校验规则
             { required: false, message: '商品SKU' }
@@ -186,6 +218,7 @@ export const crudOptions = () => {
         title: '商品条码',
         key: 'bar_code',
         width: 90,
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           rules: [ // 表单校验规则
             { required: false, message: '商品条码' }
@@ -290,6 +323,7 @@ export const crudOptions = () => {
         key: 'weight',
         width: 90,
         type: 'number',
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           rules: [ // 表单校验规则
             { required: true, message: '重量' }
@@ -308,6 +342,7 @@ export const crudOptions = () => {
         key: 'volume',
         width: 90,
         type: 'number',
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           rules: [ // 表单校验规则
             { required: true, message: '体积' }
@@ -369,6 +404,10 @@ export const crudOptions = () => {
         key: 'is_postage',
         width: 90,
         type: 'radio',
+        search: {
+          disabled: false,
+          title: '包邮'
+        },
         dict: { // 数据字典配置， 供select等组件通过value匹配label
           name: 'is',
           url: 'is',
@@ -392,6 +431,7 @@ export const crudOptions = () => {
         key: 'shipment_id',
         width: 90,
         type: 'select',
+        disabled: true, // 设置true可以在行展示中隐藏
         form: {
           rules: [ // 表单校验规则
             { required: false, message: '运费模板' }
@@ -415,6 +455,44 @@ export const crudOptions = () => {
           value: 0
         },
         component: {
+        }
+      },
+      {
+        title: '商品详情',
+        key: 'content',
+        sortable: true,
+        width: 300,
+        type: 'editor-quill', // 富文本图片上传依赖file-uploader，请先配置好file-uploader
+        disabled: true, // 设置true可以在行展示中隐藏
+        form: {
+          component: {
+            disabled: () => {
+              return vm.getEditForm().disable
+            },
+            props: {
+              uploader: {
+                type: 'form' // 上传后端类型【cos,aliyun,oss,form】
+              }
+            },
+            events: {
+              'text-change': (event) => {
+                console.log('text-change:', event)
+              }
+            },
+            show: true
+          }
+        }
+      },
+      {
+        title: '规格选项',
+        key: 'variants',
+        width: 90,
+        disabled: true, // 设置true可以在行展示中隐藏
+        form: {
+          component: {
+              name: 'd2-sku'
+            },
+          show: true
         }
       }
     ]
